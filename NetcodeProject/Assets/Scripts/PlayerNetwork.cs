@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            TestServerRpc(new ServerRpcParams());
+            TestClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 } } });
             /*
             randomNumber.Value = new MyCustomData
             {
@@ -62,5 +63,10 @@ public class PlayerNetwork : NetworkBehaviour
     private void TestServerRpc(ServerRpcParams serverRpcParams)
     {
         Debug.Log("TestServerRpc " + OwnerClientId + "; " + serverRpcParams.Receive.SenderClientId);
+    }
+    [ClientRpc]
+    private void TestClientRpc(ClientRpcParams clientRpcParams)
+    {
+        Debug.Log("TestClientRpc");
     }
 }
