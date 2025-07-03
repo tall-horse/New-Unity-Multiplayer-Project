@@ -38,12 +38,15 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
+            TestServerRpc(new ServerRpcParams());
+            /*
             randomNumber.Value = new MyCustomData
             {
                 _int = 10,
                 _bool = false,
                 message = "mesage lol",
             };
+            */
         }
 
         moveDir = new Vector3(0, 0, 0);
@@ -54,5 +57,10 @@ public class PlayerNetwork : NetworkBehaviour
         if (Input.GetKey(KeyCode.D)) moveDir.x = +1f;
 
         transform.position += moveDir * moveSpeed * Time.deltaTime;
+    }
+    [ServerRpc]
+    private void TestServerRpc(ServerRpcParams serverRpcParams)
+    {
+        Debug.Log("TestServerRpc " + OwnerClientId + "; " + serverRpcParams.Receive.SenderClientId);
     }
 }
