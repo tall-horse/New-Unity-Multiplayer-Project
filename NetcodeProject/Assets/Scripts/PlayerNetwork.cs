@@ -7,6 +7,10 @@ public class PlayerNetwork : NetworkBehaviour
 {
     [SerializeField] private float moveSpeed = 3f;
     private Vector3 moveDir = new Vector3(0, 0, 0);
+
+    [SerializeField] private Transform spawnedObjectPrefab;
+    private Transform spawnedObjectTransform;
+
     private NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(
         new MyCustomData
         {
@@ -39,15 +43,13 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            TestClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 } } });
-            /*
-            randomNumber.Value = new MyCustomData
-            {
-                _int = 10,
-                _bool = false,
-                message = "mesage lol",
-            };
-            */
+            spawnedObjectTransform = Instantiate(spawnedObjectPrefab);
+            spawnedObjectTransform.GetComponent<NetworkObject>().Spawn(true);
+            //TestClientRpc(new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new List<ulong> { 1 } } });
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            Destroy(spawnedObjectTransform.gameObject);
         }
 
         moveDir = new Vector3(0, 0, 0);
